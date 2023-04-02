@@ -48,6 +48,7 @@
      <Compile Include="Assets\update.cs" />
      <Compile Include="Assets\Input_.cs" />
      <Compile Include="Assets\Joystick Pack\Examples\JoystickPlayerExample.cs" />
+     <Compile Include="Assets\AdaptiveCamera.cs" />
     <Reference Include="UnityEngine">
         <HintPath>D:\Create\Editor\2020.3.41f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
