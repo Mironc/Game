@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Entity : MonoCache
+public class Entity : MonoBehaviour
 {
     private NavMeshAgent NMV;
     private void Awake() 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Input_ : MonoCache
+public class Input_ : MonoBehaviour
 {
     [SerializeField]private InputMode Inputmode;
     private Joystick joystick;
