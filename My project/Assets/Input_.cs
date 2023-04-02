@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class Input_ : MonoBehaviour
 {
     [SerializeField]private InputMode Inputmode;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AdaptiveCamera : MonoBehaviour
 {
-    private Camera camera;
+    private new Camera camera;
     float FovRatio = 26;
     private void Start() 
     {
