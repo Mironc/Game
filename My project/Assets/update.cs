@@ -9,9 +9,9 @@ public class update : MonoBehaviour
     private List<IFixedUpdate> FixedUpdates = new List<IFixedUpdate>(100);
     private void Awake() 
     {
-        GetComponents<IUpdate>(this.Updates);
-        GetComponents<ILateupdate>(this.LateUpdates);
-        GetComponents<IFixedUpdate>(this.FixedUpdates);
+        GetComponentsInChildren<IUpdate>(this.Updates);
+        GetComponentsInChildren<ILateupdate>(this.LateUpdates);
+        GetComponentsInChildren<IFixedUpdate>(this.FixedUpdates);
     }
     private void Update()
     {
@@ -22,7 +22,6 @@ public class update : MonoBehaviour
     }
     private void LateUpdate()
     {
-        
         for (int i = 0; i < this.LateUpdates.Count; i++)
         {
             this.LateUpdates[i].LateTick();
@@ -30,8 +29,7 @@ public class update : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        
-        for (int i = 0; i < this.Updates.Count; i++)
+        for (int i = 0; i < this.FixedUpdates.Count; i++)
         {
             this.FixedUpdates[i].FixedTick();
         }

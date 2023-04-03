@@ -1,7 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class PlayerController : MonoBehaviour, IUpdate
+public class PlayerController : MonoBehaviour, IUpdate, ILateupdate
 {
     [SerializeField] private float Speed;
     private Rigidbody Rb;
@@ -20,12 +20,10 @@ public class PlayerController : MonoBehaviour, IUpdate
     {
         Rb = GetComponent<Rigidbody>();
     }
-    
-    private void LateUpdate() 
+    public void LateTick()
     {
         Rotation();
         cameraShake();
-        Physics.Raycast(camera.ScreenPointToRay(new Vector3(Screen.width/2,Screen.height/2,0)),out this.LookInfo,100000000f,this.LayerMaskLook);
     }
     #region Camera
     [SerializeField] private float Sensitivity;
@@ -78,6 +76,7 @@ public class PlayerController : MonoBehaviour, IUpdate
     {
         Rb.AddRelativeForce(Speed * this.Input_.GetMove * Time.deltaTime);
         this.Walk = this.Input_.GetMove != Vector3.zero ? true : false;
+        Physics.Raycast(camera.ScreenPointToRay(new Vector3(Screen.width/2,Screen.height/2,0)),out this.LookInfo,100000000f,this.LayerMaskLook);
     }
         
     [SerializeField]public void GetDamage(int health,int Damage)
