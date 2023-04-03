@@ -6,11 +6,12 @@ public class Bullet : MonoBehaviour,IUpdate
 {
     private Rigidbody RB;
     private float damage;
-    private float speed;
-    private void Awake() 
+    [SerializeField]private float speed;
+    private void OnEnable() 
     {
         transform.localRotation = Quaternion.FromToRotation(transform.position,PlayerController.instance.LookInfo.point);
         RB = GetComponent<Rigidbody>();
+        Debug.Log("Init");
     }
     public void Tick()
     {
