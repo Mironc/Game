@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-public class Gun : MonoBehaviour,IUpdate
+public class Gun : MonoCache
 {
     [SerializeField]private GunData data;
     [SerializeField]private GameObject Bullet;
     public static Action OnShoot;
-    public void Tick()
+    override public void Tick()
     {
         this.data.BulletPlace = GetComponentInChildren<Transform>();
         if(Input.GetMouseButton(0) && this.data.typeShoot == GunData.TypeShoot.Automatic && this.data.LastTimeFired > this.data.SpeedShooting)

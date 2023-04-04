@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour,IUpdate
+public class Bullet : MonoCache
 {
     private Rigidbody RB;
     private float damage;
@@ -13,12 +13,12 @@ public class Bullet : MonoBehaviour,IUpdate
         RB = GetComponent<Rigidbody>();
         Debug.Log("Init");
     }
-    public void Tick()
+    override public void Tick()
     {
         RB.velocity = Vector3.forward * Time.deltaTime * speed;
     }
     private void OnTriggerEnter(Collider other) 
     {
-        if(!other.gameObject.CompareTag("Player") && !other.gameObject.CompareTag("Bullet")) Destroy(this);    
+        if(!other.gameObject.CompareTag("Player") && !other.gameObject.CompareTag("Bullet")) Destroy(this.gameObject);    
     }
 }

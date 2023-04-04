@@ -19,8 +19,8 @@ MonoBehaviour:
   BulletDamageMin: 24
   MaxBullet: 30
   CurrentBullet: 30
-  SpeedShooting: 1
+  SpeedShooting: 0.1
   ReloadTime: 5
   RecoilOnRun: 0
   Recoil: 0
-  LastTimeFired: 240.92696
+  LastTimeFired: 49.645687

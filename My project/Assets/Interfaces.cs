@@ -8,17 +8,17 @@ interface IDamagable
     void GetHealth(int Health,int Heal);
     void GetDamage(int Health,int Damage);
 }
-interface ILateupdate 
+public interface ILateUpdate 
 {
     void LateTick();    
 }
-interface IFixedUpdate
+public interface IFixedUpdate
 {
     void FixedTick();
 }
-interface IUpdate
+public interface IUpdate
 {
-    void Tick();    
+    public void Tick();    
 }
 interface INeitralEntity : IDamagable 
 {
