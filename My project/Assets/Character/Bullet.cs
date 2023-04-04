@@ -9,8 +9,8 @@ public class Bullet : MonoCache
     [SerializeField]private float speed;
     private void OnEnable() 
     {
-        transform.localRotation = Quaternion.FromToRotation(transform.position,PlayerController.instance.LookInfo.point);
-        RB = GetComponent<Rigidbody>();
+        transform.localRotation = Quaternion.FromToRotation(transform.position,PlayerController.Instance.LookInfo.point);
+        RB = Get<Rigidbody>();
         Debug.Log("Init");
     }
     override public void Tick()

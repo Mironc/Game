@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EasyWay;
 
-public abstract class MonoCache : MonoBehaviour, IUpdate, ILateUpdate, IFixedUpdate
+public abstract class MonoCache : FastCut, IUpdate, ILateUpdate, IFixedUpdate
 {
     private void OnEnable()
     {

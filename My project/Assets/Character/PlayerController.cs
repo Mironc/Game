@@ -1,17 +1,17 @@
 using UnityEngine;
+using EasyWay;
 using Random = UnityEngine.Random;
 
-public class PlayerController : MonoCache
+public class PlayerController : InstanceCache<PlayerController>
 {
     [SerializeField] private float Speed;
     private Rigidbody Rb;
     private bool Walk;
     private Input_ Input_;
-    public static PlayerController instance;
     public int Health{get;private set;}
     private void Awake()
     {
-        if(instance == null) instance = this;
+        
         this.Input_ = GetComponent<Input_>();
         this.camera = Camera.main;
         this.DefPos = this.camera.transform.localPosition;
