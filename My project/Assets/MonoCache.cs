@@ -8,7 +8,7 @@ public abstract class MonoCache : FastCut, IUpdate, ILateUpdate, IFixedUpdate
     private void OnEnable()
     {
         Add();
-
+        OnEnable_();
     }
     protected virtual void OnEnable_()
     { }
@@ -17,6 +17,7 @@ public abstract class MonoCache : FastCut, IUpdate, ILateUpdate, IFixedUpdate
     private void OnDisable()
     {
         Remove();
+        OnDisable_();
     }
     private void Add()
     {

@@ -9,7 +9,7 @@ namespace EasyWay
         public static TObj Instance;
         public static void SetInstance()
         {
-            Instance = Instance != null ? Instance : FindObjectOfType<TObj>();
+           Instance = Instance != null ? Instance : FindObjectOfType<TObj>();
         }
     }
     public abstract class InstanceCache<TCache> : MonoCache where TCache : MonoCache

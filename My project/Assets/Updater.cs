@@ -1,16 +1,16 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using EasyWay;
 
-public class Updater : MonoBehaviour
-{
-    private readonly List<IUpdate> Updates = new List<IUpdate>(100);
-    private readonly List<ILateUpdate> LateUpdates = new List<ILateUpdate>(100);
-    private readonly List<IFixedUpdate> FixedUpdates = new List<IFixedUpdate>(100);
-    public static Updater Instance;
-    private void Awake() 
+public class Updater : InstanceBeh<Updater>
+{ 
+    [SerializeField]private List<IUpdate> Updates = new List<IUpdate>(100);
+    [SerializeField]private List<ILateUpdate> LateUpdates = new List<ILateUpdate>(100);
+    [SerializeField]private List<IFixedUpdate> FixedUpdates = new List<IFixedUpdate>(100);
+    private void OnEnable()
     {
-        Instance = Instance == null ? this : Instance;
+        SetInstance();
     }
     public void AddUpdate(IUpdate Update)
     {
@@ -38,6 +38,7 @@ public class Updater : MonoBehaviour
     }
     private void Update()
     {
+        if(this.LateUpdates.Count == 0) throw new Exception("Count Update = 0");
         for (int i = 0; i < this.Updates.Count; i++)
         {
             this.Updates[i].Tick();
@@ -45,6 +46,7 @@ public class Updater : MonoBehaviour
     }
     private void LateUpdate()
     {
+        if(this.LateUpdates.Count == 0) throw new Exception("Count LateUpdate = 0");
         for (int i = 0; i < this.LateUpdates.Count; i++)
         {
             this.LateUpdates[i].LateTick();
@@ -52,6 +54,7 @@ public class Updater : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if(this.LateUpdates.Count == 0) throw new Exception("Count FixedUpdate = 0");
         for (int i = 0; i < this.FixedUpdates.Count; i++)
         {
             this.FixedUpdates[i].FixedTick();
