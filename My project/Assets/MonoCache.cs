@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EasyWay;
+using Tools;
 
 public abstract class MonoCache : FastCut, IUpdate, ILateUpdate, IFixedUpdate
 {
@@ -35,7 +35,6 @@ public abstract class MonoCache : FastCut, IUpdate, ILateUpdate, IFixedUpdate
     public void RunTick() => Tick();
     public virtual void LateTick() { }
     public void RunLateTick() => LateTick();
-
     public virtual void FixedTick() { }
     public void RunFixedTick() => FixedTick();
 

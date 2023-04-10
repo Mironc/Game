@@ -1,27 +1,53 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
+using Object = UnityEngine.Object;
+using System;
 
-namespace EasyWay
+namespace Tools
 {
-    using UnityEngine;
     public abstract class InstanceBeh<TObj> : MonoBehaviour where TObj : MonoBehaviour
     {
-        public static TObj Instance;
+        private static TObj CachedInstance;
+        public static TObj Instance
+        {
+            get
+            {
+                return CachedInstance;
+            }
+        }
         public static void SetInstance()
         {
-           Instance = Instance != null ? Instance : FindObjectOfType<TObj>();
+            CachedInstance = CachedInstance != null ? CachedInstance : FindObjectOfType<TObj>();
+            
+        }
+        private static void CheckInstance()
+        {
+            if (Instance == null) throw new NullReferenceException();
         }
     }
     public abstract class InstanceCache<TCache> : MonoCache where TCache : MonoCache
     {
-        public static TCache Instance;
+        public static TCache Instance
+        {
+            get
+            {
+                CheckInstance();
+                return Instance;
+            }
+            set
+            {
+                Instance = value;
+            }
+        }
         public static void SetInstance()
         {
             Instance = Instance != null ? Instance : FindObjectOfType<TCache>();
         }
+        private static void CheckInstance()
+        {
+            if (Instance == null) throw new NullReferenceException();
+        }
     }
-
-    public abstract class FastCut : MonoBehaviour 
+    public abstract class FastCut : MonoBehaviour
     {
         public T Get<T>() => GetComponent<T>();
         public T[] Gets<T>() => GetComponents<T>();
@@ -29,8 +55,9 @@ namespace EasyWay
         public T[] Finds<T>() where T : Object => FindObjectsOfType<T>();
         public T GetChild<T>() => GetComponentInChildren<T>();
         public T[] GetsChild<T>() => GetComponentsInChildren<T>();
-        public T GetParent<T>() => GetComponentInParent<T>(); 
-        public T[] GetsParent<T>() => GetComponentsInParent<T>(); 
+        public T GetParent<T>() => GetComponentInParent<T>();
+        public T[] GetsParent<T>() => GetComponentsInParent<T>();
     }
-
 }
+
+

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using EasyWay;
+using Tools;
 
 public class Updater : InstanceBeh<Updater>
 { 
@@ -11,6 +11,7 @@ public class Updater : InstanceBeh<Updater>
     private void OnEnable()
     {
         SetInstance();
+        Debug.Log("1");
     }
     public void AddUpdate(IUpdate Update)
     {
@@ -42,6 +43,7 @@ public class Updater : InstanceBeh<Updater>
         for (int i = 0; i < this.Updates.Count; i++)
         {
             this.Updates[i].Tick();
+            Debug.Log(this.Updates[i]);
         }
     }
     private void LateUpdate()

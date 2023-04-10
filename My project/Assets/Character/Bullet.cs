@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoCache
@@ -7,7 +5,7 @@ public class Bullet : MonoCache
     private Rigidbody RB;
     private float damage;
     [SerializeField]private float speed;
-    private void OnEnable() 
+    override protected void OnEnable_() 
     {
         transform.localRotation = Quaternion.FromToRotation(transform.position,PlayerController.Instance.LookInfo.point);
         RB = Get<Rigidbody>();

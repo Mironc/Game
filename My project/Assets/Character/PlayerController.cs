@@ -1,5 +1,5 @@
 using UnityEngine;
-using EasyWay;
+using Tools;
 using Random = UnityEngine.Random;
 
 public class PlayerController : InstanceCache<PlayerController>
