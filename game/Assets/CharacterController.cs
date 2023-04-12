@@ -1,18 +1,18 @@
-using UnityEngine;
 using Tools;
+using System;
+using UnityEngine;
 
 [RequireComponent(typeof(InputHandler), typeof(Rigidbody))]
 public class CharacterController : FastCut
 {
+    [SerializeField]private movementproperty MovementProperty;
+    [SerializeField]private rotationproperty RotationProperty;
     private Rigidbody RB;
     private InputHandler InputHandler;
-    [SerializeField] private float Speed;
-    [SerializeField] private float MaxSpeed;
-    [SerializeField] private float MaxFallSpeed;
-    [SerializeField] private float Sensetivity;
     private Camera Camera;
     private float RotationX;
-    private float RotationY;
+    private float RotationY = 0f;
+
     private void Awake()
     {
         this.RB = Get<Rigidbody>();
@@ -26,19 +26,31 @@ public class CharacterController : FastCut
     }
     private void Move()
     {
-        RB.AddRelativeForce(InputHandler.Move * Speed * Time.deltaTime);
-        RB.velocity = new Vector3
+        this.RB.AddRelativeForce(this.InputHandler.Move * this.MovementProperty.Speed * Time.deltaTime);
+        this.RB.velocity = new Vector3
         (
-        Mathf.Clamp(this.RB.velocity.x, -this.MaxSpeed, this.MaxSpeed),
-        Mathf.Clamp(this.RB.velocity.x, -this.MaxSpeed, this.MaxSpeed),
-        Mathf.Clamp(this.RB.velocity.z, -this.MaxSpeed, this.MaxSpeed)
+        Mathf.Clamp(this.RB.velocity.x, -this.MovementProperty.MaxSpeed, this.MovementProperty.MaxSpeed),
+        Mathf.Clamp(this.RB.velocity.y, -this.MovementProperty.MaxFallSpeed, this.MovementProperty.MaxFallSpeed),
+        Mathf.Clamp(this.RB.velocity.z, -this.MovementProperty.MaxSpeed, this.MovementProperty.MaxSpeed)
         );
     }
     private void Rotation()
     {
-        this.RotationX += this.InputHandler.Rotation.x * this.Sensetivity * Time.deltaTime;
-        this.RotationY -= this.InputHandler.Rotation.y * this.Sensetivity * Time.deltaTime;
+        this.RotationX += this.InputHandler.Rotation.x * this.RotationProperty.Sensetivity * Time.deltaTime;
+        this.RotationY -= this.InputHandler.Rotation.y * this.RotationProperty.Sensetivity * Time.deltaTime;
+        this.RotationY = Mathf.Clamp(this.RotationY,-this.RotationProperty.MaxAngleY,this.RotationProperty.MaxAngleY);
         transform.localRotation = Quaternion.AngleAxis(this.RotationX, Vector3.up);
         Camera.transform.localRotation = Quaternion.AngleAxis(this.RotationY, Vector3.right);
+    }
+    [Serializable]public struct rotationproperty
+    {
+    public float Sensetivity;
+    public int MaxAngleY;
+    }
+    [Serializable]public struct movementproperty
+    {
+    public float Speed;
+    public float MaxSpeed;
+    public float MaxFallSpeed;
     }
 }

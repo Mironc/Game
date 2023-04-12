@@ -35,13 +35,6 @@ namespace Tools
         public T GetParent<T>() => GetComponentInParent<T>();
         public T[] GetsParent<T>() => GetComponentsInParent<T>();
     }
-    public abstract class Logger
-    {
-        protected void NullRef()
-        {
-            throw new NullReferenceException();
-        }
-    }
 }
 
 
