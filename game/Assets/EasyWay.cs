@@ -4,10 +4,10 @@ using System;
 
 namespace Tools
 {
-    public abstract class InstanceBeh<TObj> : MonoBehaviour where TObj : MonoBehaviour
+    public abstract class Instancer<InstanceObjectType> : FastCut where InstanceObjectType : FastCut
     {
-        private static TObj CachedInstance;
-        public static TObj Instance
+        private static InstanceObjectType CachedInstance;
+        public static InstanceObjectType Instance
         {
             get
             {
@@ -16,8 +16,15 @@ namespace Tools
         }
         public static void SetInstance()
         {
-            CachedInstance = CachedInstance != null ? CachedInstance : FindObjectOfType<TObj>();
-            
+            InstanceObjectType[] AllInstances = FindObjectsOfType<InstanceObjectType>();
+            if(AllInstances.Length > 1)
+            {
+                for (int i = 1; i < AllInstances.Length; i++)
+                {
+                    Destroy(AllInstances[i]);
+                }
+            }
+            CachedInstance = AllInstances[0];
         }
         private static void CheckInstance()
         {
@@ -35,6 +42,10 @@ namespace Tools
         public T GetParent<T>() => GetComponentInParent<T>();
         public T[] GetsParent<T>() => GetComponentsInParent<T>();
     }
+}
+namespace Tools.п
+{
+
 }
 
 
