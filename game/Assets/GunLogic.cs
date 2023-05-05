@@ -1,13 +1,12 @@
 using System.Collections;
 using Tools;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class GunLogic : FastCut
 {
-    [SerializeField] public Gun CurrentGunOnHand;
-    [SerializeField] private Gun FirstGun;
-    [SerializeField] private Gun SecondGun;
+    [SerializeField] public GunConstruct CurrentGunOnHand;
+    [SerializeField] private GunConstruct FirstGun;
+    [SerializeField] private GunConstruct SecondGun;
     public static GunLogic Instance;
     public Vector2 Recoil;
     private bool Switched;
@@ -19,11 +18,10 @@ public class GunLogic : FastCut
     private void Awake()
     {
         Instance = Instance == null ? Instance = this : Instance;
-        Random.InitState(this.CurrentGunOnHand.SeedOfRecoil);
     }
     private void Update()
     {
-        switch (this.CurrentGunOnHand.TypeofShoot)
+        /* switch (this.CurrentGunOnHand.TypeofShoot)
         {
             case Gun.ShootType.Auto:
                 if (Input.GetMouseButton(1) && this.DelayAboutShootTimer > CurrentGunOnHand.DelayAboutShoot)
@@ -58,7 +56,7 @@ public class GunLogic : FastCut
 
             default:
                 break;
-        }
+        } */
         if (Input.GetKeyDown(KeyCode.R) && this.CurrentGunOnHand.CountOfBullets != this.CurrentGunOnHand.MaxCountOfBullet) Reload();
     }
     private void ShotLogic()
@@ -68,7 +66,6 @@ public class GunLogic : FastCut
             if (!Reloading)
             {
                 Instantiate(Bullet, BulletPlace.transform.position, Quaternion.identity);
-                AddRecoil();
                 this.CurrentGunOnHand.DecreaseCountOfBullet();
                 this.DelayAboutShootTimer = 0;
             }
@@ -79,7 +76,7 @@ public class GunLogic : FastCut
         }
         Reload();
     }
-    private void SwitchGun(Gun gun)
+    private void SwitchGun(GunConstruct gun)
     {
         if (gun == null) return;
         CurrentGunOnHand = gun;

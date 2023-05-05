@@ -10,7 +10,11 @@ public class Bullet : FastCut
     private void OnEnable() 
     {
         RB = Get<Rigidbody>();
-        this.Speed = GunLogic.Instance.CurrentGunOnHand.BulletSpeed;
+        if()
+        {
+
+        }
+        this.Speed = GunLogic.Instance.CurrentGunOnHand.Shoot.BulletSpeed;
         transform.LookAt(CharacterController.Instance.RayProperties.LookInfo.point,Vector3.left);  
         RB.velocity = ((CharacterController.Instance.RayProperties.LookInfo.point - transform.position) + new Vector3(GunLogic.Instance.Recoil.x,GunLogic.Instance.Recoil.y,0)).normalized  * this.Speed;
     }
