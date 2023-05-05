@@ -2,21 +2,15 @@ using Tools;
 using System;
 using UnityEngine;
 
+
 [RequireComponent(typeof(InputHandler), typeof(Rigidbody))]
-public class CharacterController : Instancer<CharacterController>
+public class CharacterController : FastCut
 {
-    [SerializeField]private movementproperty MovementProperty;
-    [SerializeField]private rotationproperty RotationProperty;
-    [SerializeField]private LayerMask LookInfoLayerMask;
-    [SerializeField]private bobproperty BobProperty;
-    [HideInInspector]public RaycastHit LookInfo{
-        get
-        {
-            RaycastHit CachedRaycast;
-            Physics.Raycast(transform.position,Vector3.forward,out CachedRaycast,Mathf.Infinity,this.LookInfoLayerMask);
-            return CachedRaycast;
-        }
-    }
+    [SerializeField] public movementproperty MovementProperties;
+    [SerializeField] private rotationproperty RotationProperties;
+    [SerializeField] private bobproperty BobProperties;
+    [SerializeField] public rayproperty RayProperties;
+    public static CharacterController Instance;
     private Rigidbody RB;
     private InputHandler InputHandler;
     private Camera Camera;
@@ -25,84 +19,128 @@ public class CharacterController : Instancer<CharacterController>
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        SetAllProperties();
-        SetInstance();
+        this.SetAllProperties();
         DontDestroyOnLoad(this);
+        Instance = Instance == null ? Instance = this : Instance;
     }
     private void SetAllProperties()
     {
         this.RB = Get<Rigidbody>();
         this.Camera = Camera.main;
         this.InputHandler = Get<InputHandler>();
-        this.RotationProperty.RotationY = 90f;
-        this.BobProperty.BobHeadFirstPosition = Camera.transform.localPosition;
+        this.RotationProperties.RotationY = 90f;
+        this.BobProperties.BobHeadFirstPosition = Camera.transform.localPosition;
     }
     private void Update()
     {
         this.Move();
         this.Rotation();
         this.BobHead();
+        this.UpdateRaycast();
     }
-    private void Move()
-    {
-        this.RB.AddRelativeForce(this.InputHandler.Move * Mathf.Pow(this.MovementProperty.Speed,this.MovementProperty.PowerSpeed) * Time.deltaTime);
-        this.RB.velocity = new Vector3
-        (
-        Mathf.Clamp(this.RB.velocity.x, -this.MovementProperty.MaxSpeed, this.MovementProperty.MaxSpeed),
-        Mathf.Clamp(this.RB.velocity.y, -this.MovementProperty.MaxFallSpeed, this.MovementProperty.MaxFallSpeed),
-        Mathf.Clamp(this.RB.velocity.z, -this.MovementProperty.MaxSpeed, this.MovementProperty.MaxSpeed)
-        );
-        this.MovementProperty.Walk = (this.InputHandler.RawMove == Vector3.zero)  ? false : true;
-    }
-    private void Rotation()
-    {
-        this.RotationProperty.RotationX += this.InputHandler.Rotation.x * this.RotationProperty.Sensetivity * Time.deltaTime;
-        this.RotationProperty.RotationY -= this.InputHandler.Rotation.y * this.RotationProperty.Sensetivity * Time.deltaTime;
-        this.RotationProperty.RotationY = Mathf.Clamp(this.RotationProperty.RotationY,-this.RotationProperty.MaxAngleY,this.RotationProperty.MaxAngleY);
-        transform.localRotation = Quaternion.AngleAxis(this.RotationProperty.RotationX, Vector3.up);
-        Camera.transform.localRotation = Quaternion.AngleAxis(this.RotationProperty.RotationY, Vector3.right);
-    }
-    private void BobHead()
-    {
-        if(!this.MovementProperty.Walk)
+    #region Rotation
+        [Serializable]
+        public struct rotationproperty
         {
-            this.BobProperty.BobHeadTimer = 0;
-            this.Camera.transform.localPosition = this.BobProperty.BobHeadFirstPosition;
-            return;
+            public float Sensetivity;
+            public int MaxAngleY;
+            [NonSerialized] public float RotationX;
+            [NonSerialized] public float RotationY;
         }
+        private void Rotation()
+        {
+            this.RotationProperties.RotationX += this.InputHandler.Rotation.x * this.RotationProperties.Sensetivity * Time.deltaTime;
+            this.RotationProperties.RotationY -= this.InputHandler.Rotation.y * this.RotationProperties.Sensetivity * Time.deltaTime;
+            this.RotationProperties.RotationY = Mathf.Clamp(this.RotationProperties.RotationY, -this.RotationProperties.MaxAngleY, this.RotationProperties.MaxAngleY);
+            transform.localRotation = Quaternion.AngleAxis(this.RotationProperties.RotationX, Vector3.up);
+            Camera.transform.localRotation = Quaternion.AngleAxis(this.RotationProperties.RotationY, Vector3.right);
+        }
+    #endregion
 
-        this.BobProperty.BobHeadTimer += Time.deltaTime;
-        this.Camera.transform.localPosition = this.Camera.transform.localPosition + new Vector3
-        (
-            this.BobProperty.BobHeadAxisAmplitude.x * Mathf.Sin(this.BobProperty.BobHeadTimer * this.BobProperty.BobHeadSpeed) * Time.deltaTime,
-            this.BobProperty.BobHeadAxisAmplitude.y * Mathf.Sin(this.BobProperty.BobHeadTimer * this.BobProperty.BobHeadSpeed) * Time.deltaTime,
-            this.BobProperty.BobHeadAxisAmplitude.z * Mathf.Sin(this.BobProperty.BobHeadTimer * this.BobProperty.BobHeadSpeed) * Time.deltaTime
-        );
-    }
-    [Serializable]public struct rotationproperty
-    {
-    public float Sensetivity;
-    public int MaxAngleY;
-    [NonSerialized]public float RotationX;
-    [NonSerialized]public float RotationY;
-    }
-    [Serializable]public struct movementproperty
-    {
-    public float Speed;
-    public float PowerSpeed;
-    public float MaxSpeed;
-    public float MaxFallSpeed;
-    public bool Walk;
-    }
-    [Serializable]public struct bobproperty
-    {
+    #region Movement
+        [Serializable]
+        public struct movementproperty
+        {
+            public float Speed;
+            public float PowerSpeed;
+            public float MaxSpeed;
+            public float MaxFallSpeed;
+            public bool Walk;
+            public float MaxAngleFloor;
+        }
+    
+        private void Move()
+        {
+            this.RB.AddRelativeForce(this.InputHandler.Move * Mathf.Pow(this.MovementProperties.Speed, this.MovementProperties.PowerSpeed) * Time.deltaTime);
+            this.RB.velocity = new Vector3
+            (
+            Mathf.Clamp(this.RB.velocity.x, -this.MovementProperties.MaxSpeed, this.MovementProperties.MaxSpeed),
+            Mathf.Clamp(this.RB.velocity.y, -this.MovementProperties.MaxFallSpeed, this.MovementProperties.MaxFallSpeed),
+            Mathf.Clamp(this.RB.velocity.z, -this.MovementProperties.MaxSpeed, this.MovementProperties.MaxSpeed)
+            );
+            this.MovementProperties.Walk = (this.InputHandler.RawMove == Vector3.zero) ? false : true;
+        }
+        private void Slide()
+        {
+            float AngleOfGround;
+        }
+    #endregion
 
-        public Vector3 BobHeadAxisAmplitude;
-        public float BobHeadSpeed;
-        [NonSerialized]public Vector3 BobHeadFirstPosition;
-        [NonSerialized]public float BobHeadTimer;
-    }
-    private void OnDrawGizmos() 
+    #region BobHead
+        [Serializable]
+        public struct bobproperty
+        {
+            public Vector3 BobHeadAxisAmplitude;
+            public float BobHeadSpeed;
+            [NonSerialized] public Vector3 BobHeadFirstPosition;
+            [NonSerialized] public float BobHeadTimer;
+        }
+        private void BobHead()
+        {
+            if (!this.MovementProperties.Walk)
+            {
+                this.BobProperties.BobHeadTimer = 0;
+                this.Camera.transform.localPosition = this.BobProperties.BobHeadFirstPosition;
+                return;
+            }
+
+            this.BobProperties.BobHeadTimer += Time.deltaTime;
+            this.Camera.transform.localPosition = this.Camera.transform.localPosition + new Vector3
+            (
+                this.BobProperties.BobHeadAxisAmplitude.x * Mathf.Sin(this.BobProperties.BobHeadTimer * this.BobProperties.BobHeadSpeed) * Time.deltaTime,
+                this.BobProperties.BobHeadAxisAmplitude.y * Mathf.Sin(this.BobProperties.BobHeadTimer * this.BobProperties.BobHeadSpeed) * Time.deltaTime,
+                this.BobProperties.BobHeadAxisAmplitude.z * Mathf.Sin(this.BobProperties.BobHeadTimer * this.BobProperties.BobHeadSpeed) * Time.deltaTime
+            );
+        }
+    #endregion
+
+    #region Ray
+        [Serializable]
+        public class rayproperty
+        {
+            public LayerMask LookInfoLayerMask;
+            public Ray CameraRay;
+            public RaycastHit LookInfo;        
+            public float GroundRayDistance; 
+            internal LayerMask GroundInfoLayerMask;
+            public Ray GroundRay;
+            public RaycastHit GroundInfo;
+        }
+        private void UpdateRaycast()
+        {
+            /* this.RayProperties.CameraRay = Camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height /2, 0)); */
+            this.RayProperties.CameraRay = new Ray(Camera.transform.position,Camera.transform.forward);
+            this.RayProperties.GroundRay = new Ray(transform.position,Vector3.down);
+            if(Physics.Raycast(this.RayProperties.CameraRay, out this.RayProperties.LookInfo, 1000f, this.RayProperties.LookInfoLayerMask));
+            else this.RayProperties.LookInfo.point = this.RayProperties.CameraRay.direction * 10f;
+            Physics.Raycast(this.RayProperties.GroundRay, out this.RayProperties.GroundInfo, 1.05f, this.RayProperties.GroundInfoLayerMask);
+        }
+    #endregion
+    #region Debug
+    private void OnDrawGizmos()
     {
+        Gizmos.DrawRay(RayProperties.CameraRay.origin,RayProperties.CameraRay.direction *100);
+        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * this.RayProperties.GroundRayDistance);
     }
+    #endregion
 }

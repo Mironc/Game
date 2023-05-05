@@ -9,11 +9,9 @@ public class Bullet : FastCut
     private Rigidbody RB;
     private void OnEnable() 
     {
-        transform.LookAt(CharacterController.Instance.LookInfo.point,new Vector3(1,1,0));
         RB = Get<Rigidbody>();
-    }
-    void Update()
-    {
-        RB.velocity = Vector3.forward * this.Speed;
+        this.Speed = GunLogic.Instance.CurrentGunOnHand.BulletSpeed;
+        transform.LookAt(CharacterController.Instance.RayProperties.LookInfo.point,Vector3.left);  
+        RB.velocity = ((CharacterController.Instance.RayProperties.LookInfo.point - transform.position) + new Vector3(GunLogic.Instance.Recoil.x,GunLogic.Instance.Recoil.y,0)).normalized  * this.Speed;
     }
 }

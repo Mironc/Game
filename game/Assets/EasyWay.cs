@@ -1,6 +1,5 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
-using System;
 
 namespace Tools
 {
@@ -25,10 +24,6 @@ namespace Tools
                 }
             }
             CachedInstance = AllInstances[0];
-        }
-        private static void CheckInstance()
-        {
-            if (Instance == null) throw new NullReferenceException();
         }
     }
     public abstract class FastCut : MonoBehaviour
