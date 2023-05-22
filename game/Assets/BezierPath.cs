@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Tools;
 
-public class Edge : FastCut
+sealed public class BezierPath : FastCut,IPath
 {
     [SerializeField]private Transform StartPoint;
     [SerializeField]private Transform EndPoint;
@@ -19,7 +19,7 @@ public class Edge : FastCut
         Vector3 P12P2e = Vector3.Lerp(P12,P2e,Position);
         return Vector3.Lerp(Ps1P12,P12P2e,Position);
     }
-    public void draw(float Position,int Segments)
+    public void draw(int Segments)
     {
         float SegmentDist = 1 / (float)Segments;
         Vector3 PrevPoint = StartPoint.position; 

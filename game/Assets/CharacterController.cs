@@ -1,10 +1,9 @@
-using Tools;
 using System;
 using UnityEngine;
 
 
-[RequireComponent(typeof(InputHandler), typeof(Rigidbody))]
-public class CharacterController : FastCut
+[RequireComponent(typeof(InputHandler))]
+sealed public class CharacterController : PhysObject
 {
     [SerializeField] public movementproperty MovementProperties;
     [SerializeField] private rotationproperty RotationProperties;
@@ -82,7 +81,7 @@ public class CharacterController : FastCut
         }
         private void Slide()
         {
-            float AngleOfGround;
+
         }
     #endregion
 
@@ -128,7 +127,6 @@ public class CharacterController : FastCut
         }
         private void UpdateRaycast()
         {
-            /* this.RayProperties.CameraRay = Camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height /2, 0)); */
             this.RayProperties.CameraRay = new Ray(Camera.transform.position,Camera.transform.forward);
             this.RayProperties.GroundRay = new Ray(transform.position,Vector3.down);
             if(Physics.Raycast(this.RayProperties.CameraRay, out this.RayProperties.LookInfo, 1000f, this.RayProperties.LookInfoLayerMask));

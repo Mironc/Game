@@ -4,16 +4,16 @@ using UnityEngine;
 using Tools;
 
 [ExecuteAlways]
-public class Platform : FastCut
+sealed public class Platform : FastCut
 {
-    [SerializeField]private Edge Path;
+    [SerializeField]private IPath Path;
     [Range(0,1)]
     [SerializeField]float position;
     [SerializeField]private Transform PlatformModel;
     [SerializeField]int drawSegments;
     private void Awake() 
     {
-        this.Path = GetChild<Edge>();
+        this.Path = GetChild<IPath>();
     }
     private void Update()
     {
@@ -21,6 +21,11 @@ public class Platform : FastCut
     }
     private void OnDrawGizmos() 
     {
-        this.Path.draw(this.position,this.drawSegments);
+        this.Path.draw(this.drawSegments);
     }
+}
+interface IPath
+{
+    void draw(int segments);
+    Vector3 FindPosition(float t);
 }
