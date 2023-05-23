@@ -157,6 +157,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db589a28d70075b46ae1a02564d6e1c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Parametrs:
+    Move: 1
+    Rotation: 1
+    BobHead: 1
+    Ray: 1
+    Debug: 1
   MovementProperties:
     Speed: 100
     PowerSpeed: 1.6
@@ -328,12 +334,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b740cc8db6b9dd344910f0a5cf044c44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentGunOnHand: {fileID: 11400000, guid: 41a8bc708affdc644976fb80e7fe17f7, type: 2}
-  FirstGun: {fileID: 0}
-  SecondGun: {fileID: 0}
-  Recoil: {x: 0, y: 0}
-  Bullet: {fileID: 4609953447324197926, guid: ef8d791494757a3439203e79d7a4fd5d, type: 3}
-  BulletPlace: {fileID: 445618781}
 --- !u!23 &429501156
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -870,7 +870,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1116888646}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62c9092a1774aa448aa084c27fb032d5, type: 3}
+  m_Script: {fileID: 11500000, guid: eb5a6ce736e0a974d9b179138e6dfd07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   StartPoint: {fileID: 1116888647}
@@ -906,7 +906,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d60794a5d6bf21e49a3cf1041ff9b8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Path: {fileID: 1116888648}
   position: 1
   PlatformModel: {fileID: 1462466907}
   drawSegments: 30

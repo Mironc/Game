@@ -1,10 +1,12 @@
 using System;
 using UnityEngine;
+using Tools.serialize;
 
 
 [RequireComponent(typeof(InputHandler))]
-sealed public class CharacterController : PhysObject
+sealed public class CharacterController : serialize<CharacterController>
 {
+    [SerializeField] private parametrs Parametrs;
     [SerializeField] public movementproperty MovementProperties;
     [SerializeField] private rotationproperty RotationProperties;
     [SerializeField] private bobproperty BobProperties;
@@ -14,6 +16,23 @@ sealed public class CharacterController : PhysObject
     private InputHandler InputHandler;
     private Camera Camera;
 
+    [Serializable]
+    struct parametrs
+    {
+        public bool Move,
+        Rotation,
+        BobHead,
+        Ray,
+        Debug;
+    }
+    private void OnEnable() 
+    {
+        LoadData("characterdat");
+    }
+    private void OnDisable() 
+    {
+        SaveData("characterdat",this);
+    }
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -32,10 +51,14 @@ sealed public class CharacterController : PhysObject
     }
     private void Update()
     {
-        this.Move();
-        this.Rotation();
-        this.BobHead();
-        this.UpdateRaycast();
+        if(this.Parametrs.Move)
+            this.Move();
+        if(this.Parametrs.Rotation)
+            this.Rotation();
+        if(this.Parametrs.BobHead)
+            this.BobHead();
+        if(this.Parametrs.Ray)
+            this.UpdateRaycast();
     }
     #region Rotation
         [Serializable]
@@ -137,8 +160,11 @@ sealed public class CharacterController : PhysObject
     #region Debug
     private void OnDrawGizmos()
     {
-        Gizmos.DrawRay(RayProperties.CameraRay.origin,RayProperties.CameraRay.direction *100);
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * this.RayProperties.GroundRayDistance);
+        if(this.Parametrs.Debug)
+        {
+            Gizmos.DrawRay(RayProperties.CameraRay.origin,RayProperties.CameraRay.direction *100);
+            Gizmos.DrawLine(transform.position, transform.position + Vector3.down * this.RayProperties.GroundRayDistance);
+        }
     }
     #endregion
 }

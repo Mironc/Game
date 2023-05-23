@@ -2,8 +2,8 @@ using UnityEngine;
 using Tools;
 public class SimplePath : FastCut,IPath
 {
-    private Transform StartPoint;
-    private Transform EndPoint;
+    [SerializeField]private Transform StartPoint;
+    [SerializeField]private Transform EndPoint;
     public Vector3 FindPosition(float position)
     {
         return Vector3.Lerp(StartPoint.position,EndPoint.position,position);
