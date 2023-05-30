@@ -1,6 +1,6 @@
 using UnityEngine;
 using Tools;
-public class SimplePath : FastCut,IPath
+public class SimplePath : MonoBehaviour,IPath
 {
     [SerializeField]private Transform StartPoint;
     [SerializeField]private Transform EndPoint;

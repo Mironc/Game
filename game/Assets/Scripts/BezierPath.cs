@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Tools;
 
-sealed public class BezierPath : FastCut,IPath
+sealed public class BezierPath : MonoBehaviour,IPath
 {
     [SerializeField]private Transform StartPoint;
     [SerializeField]private Transform EndPoint;

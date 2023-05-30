@@ -1,7 +1,6 @@
 using UnityEngine;
-using Tools;
 [RequireComponent(typeof(Collider),typeof(Rigidbody))]
-abstract public class PhysObject : FastCut
+abstract public class PhysObject : MonoBehaviour
 {
     private void OnCollisionEnter(Collision other) 
     {

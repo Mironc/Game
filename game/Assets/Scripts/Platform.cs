@@ -4,16 +4,16 @@ using UnityEngine;
 using Tools;
 
 [ExecuteAlways]
-sealed public class Platform : FastCut
+sealed public class Platform : MonoBehaviour
 {
     [SerializeField]private IPath Path;
     [Range(0,1)]
-    [SerializeField]float position;
+    [SerializeField]private float position;
     [SerializeField]private Transform PlatformModel;
-    [SerializeField]int drawSegments;
+    [SerializeField]private int drawSegments;
     private void Awake() 
     {
-        this.Path = GetChild<IPath>();
+        this.Path = GetComponentInChildren<IPath>();
     }
     private void Update()
     {
